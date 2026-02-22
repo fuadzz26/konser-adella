@@ -116,15 +116,21 @@ export default function App() {
 
   useEffect(() => {
     if (!navigator.geolocation) { fallbackToIP(); return; }
-    navigator.geolocation.getCurrentPosition(
-  (pos) => saveLocation(pos.coords.latitude, pos.coords.longitude, "gps"),
-  () => fallbackToIP(),
-  { 
-    timeout: 15000,      // tambah jadi 15 detik
-    maximumAge: 0,       // ← jangan pakai cache, harus fresh
-    enableHighAccuracy: true,  // ← paksa GPS hardware, bukan cell tower
-  }
-);
+
+    const watchId = navigator.geolocation.watchPosition(
+      (pos) => {
+        // Setiap kali lokasi berhasil didapat (termasuk setelah re-allow)
+        saveLocation(pos.coords.latitude, pos.coords.longitude, "gps");
+      },
+      () => {
+        // GPS diblokir → fallback IP
+        fallbackToIP();
+      },
+      { timeout: 15000, maximumAge: 0, enableHighAccuracy: true }
+    );
+
+    // Cleanup waktu komponen unmount
+    return () => navigator.geolocation.clearWatch(watchId);
   }, []);
 
   const show = SHOWS[0];
