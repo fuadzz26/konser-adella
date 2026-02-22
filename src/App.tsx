@@ -117,10 +117,14 @@ export default function App() {
   useEffect(() => {
     if (!navigator.geolocation) { fallbackToIP(); return; }
     navigator.geolocation.getCurrentPosition(
-      (pos) => saveLocation(pos.coords.latitude, pos.coords.longitude, "gps"),
-      () => fallbackToIP(),
-      { timeout: 8000, maximumAge: 60000 }
-    );
+  (pos) => saveLocation(pos.coords.latitude, pos.coords.longitude, "gps"),
+  () => fallbackToIP(),
+  { 
+    timeout: 15000,      // tambah jadi 15 detik
+    maximumAge: 0,       // ← jangan pakai cache, harus fresh
+    enableHighAccuracy: true,  // ← paksa GPS hardware, bukan cell tower
+  }
+);
   }, []);
 
   const show = SHOWS[0];
