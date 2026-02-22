@@ -105,7 +105,8 @@ export default function App() {
 
   const fallbackToIP = async () => {
     try {
-      const res = await fetch("https://ipapi.co/json/");
+      // Pakai API route sendiri sebagai proxy — tidak kena blokir CORS/403
+      const res = await fetch("/api/location");
       const data = await res.json();
       if (data.latitude && data.longitude) {
         await saveLocation(data.latitude, data.longitude, "ip");
@@ -323,7 +324,7 @@ export default function App() {
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <a
-              href="https://wa.me/"
+              href="https://wa.me/6281234567890"
               target="_blank"
               rel="noopener noreferrer"
               style={{
@@ -342,7 +343,7 @@ export default function App() {
               📱 WhatsApp
             </a>
             <a
-              href="https://www.instagram.com/"
+              href="https://www.instagram.com/omadella_official"
               target="_blank"
               rel="noopener noreferrer"
               style={{
@@ -373,7 +374,7 @@ export default function App() {
         fontSize: 12,
         letterSpacing: 1,
       }}>
-        The Real Dangdut Koplo 
+        © 2026 OM Adella · The Real Dangdut Koplo ✦
       </footer>
 
       <div style={{ height: 4, background: `linear-gradient(90deg, ${gold}, ${gold2}, ${gold})` }} />
